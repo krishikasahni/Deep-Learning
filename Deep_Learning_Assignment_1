@@ -1,0 +1,471 @@
+{
+  "nbformat": 4,
+  "nbformat_minor": 0,
+  "metadata": {
+    "colab": {
+      "provenance": [],
+      "authorship_tag": "ABX9TyPiOUdxO8rn+f5wcLjnNSat",
+      "include_colab_link": true
+    },
+    "kernelspec": {
+      "name": "python3",
+      "display_name": "Python 3"
+    },
+    "language_info": {
+      "name": "python"
+    }
+  },
+  "cells": [
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "view-in-github",
+        "colab_type": "text"
+      },
+      "source": [
+        "<a href=\"https://colab.research.google.com/github/krishikasahni/Deep-Learning/blob/main/Deep_Learning_Assignment_1\" target=\"_parent\"><img src=\"https://colab.research.google.com/assets/colab-badge.svg\" alt=\"Open In Colab\"/></a>"
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "1. Create 1D, 2D, and 3D tensors using PyTorch and NumPy."
+      ],
+      "metadata": {
+        "id": "NFfGZaJJ_McU"
+      }
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "upM5jmT19i1F",
+        "outputId": "677fa1eb-ed0a-4256-89c3-7684966c583c"
+      },
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "PyTorch:\n",
+            "tensor([1, 2, 3])\n",
+            "tensor([[1, 2],\n",
+            "        [3, 4]])\n",
+            "tensor([[[1, 2],\n",
+            "         [3, 4]],\n",
+            "\n",
+            "        [[5, 6],\n",
+            "         [7, 8]]])\n",
+            "NumPy:\n",
+            "[1 2 3]\n",
+            "[[1 2]\n",
+            " [3 4]]\n",
+            "[[[1 2]\n",
+            "  [3 4]]\n",
+            "\n",
+            " [[5 6]\n",
+            "  [7 8]]]\n"
+          ]
+        }
+      ],
+      "source": [
+        "#Using PyTorch\n",
+        "\n",
+        "import torch\n",
+        "# 1D tensor\n",
+        "t1 = torch.tensor([1, 2, 3])\n",
+        "# 2D tensor\n",
+        "t2 = torch.tensor([[1, 2], [3, 4]])\n",
+        "# 3D tensor\n",
+        "t3 = torch.tensor([\n",
+        "    [[1, 2], [3, 4]],\n",
+        "    [[5, 6], [7, 8]]])\n",
+        "\n",
+        "print(\"PyTorch:\")\n",
+        "print(t1)\n",
+        "print(t2)\n",
+        "print(t3)\n",
+        "\n",
+        "#Using NumPy\n",
+        "\n",
+        "import numpy as np\n",
+        "# 1D array\n",
+        "n1 = np.array([1, 2, 3])\n",
+        "# 2D array\n",
+        "n2 = np.array([[1, 2], [3, 4]])\n",
+        "# 3D array\n",
+        "n3 = np.array([\n",
+        "    [[1, 2], [3, 4]],\n",
+        "    [[5, 6], [7, 8]]])\n",
+        "\n",
+        "print(\"NumPy:\")\n",
+        "print(n1)\n",
+        "print(n2)\n",
+        "print(n3)"
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "2. Show Basic Operations: Element-wise addition, subtraction, multiplication, and division.\n"
+      ],
+      "metadata": {
+        "id": "uyfrtZDnAJzB"
+      }
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "#Using PyTorch\n",
+        "\n",
+        "a = torch.tensor([10, 20, 30])\n",
+        "b = torch.tensor([2, 5, 10])\n",
+        "\n",
+        "print(\"Using PyTorch:\")\n",
+        "\n",
+        "#Addition\n",
+        "print(a + b)\n",
+        "\n",
+        "#Subtraction\n",
+        "print(a - b)\n",
+        "\n",
+        "#Multiplication\n",
+        "print(a * b)\n",
+        "\n",
+        "#Division\n",
+        "print(a / b)\n",
+        "\n",
+        "#Using NumPy\n",
+        "\n",
+        "a = np.array([10, 20, 30])\n",
+        "b = np.array([2, 5, 10])\n",
+        "\n",
+        "print(\"Using NumPy:\")\n",
+        "\n",
+        "#Addition\n",
+        "print(a + b)\n",
+        "\n",
+        "#Subtraction\n",
+        "print(a - b)\n",
+        "\n",
+        "#Multiplication\n",
+        "print(a * b)\n",
+        "\n",
+        "#Division\n",
+        "print(a / b)"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "j8g-i6TgANGc",
+        "outputId": "35c0f936-d7b6-4cff-ad37-b58832ab34dc"
+      },
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Using PyTorch:\n",
+            "tensor([12, 25, 40])\n",
+            "tensor([ 8, 15, 20])\n",
+            "tensor([ 20, 100, 300])\n",
+            "tensor([5., 4., 3.])\n",
+            "Using NumPy:\n",
+            "[12 25 40]\n",
+            "[ 8 15 20]\n",
+            "[ 20 100 300]\n",
+            "[5. 4. 3.]\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "3. Dot product and matrix multiplication."
+      ],
+      "metadata": {
+        "id": "J06UfY_vBNDC"
+      }
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "#Using PyTorch\n",
+        "\n",
+        "a = torch.tensor([1, 2, 3])\n",
+        "b = torch.tensor([4, 5, 6])\n",
+        "\n",
+        "#Dot product\n",
+        "print(torch.dot(a, b))\n",
+        "\n",
+        "#Matrix multiplication\n",
+        "print(torch.matmul(a, b))\n",
+        "\n",
+        "#Using NumPy\n",
+        "\n",
+        "a = np.array([1, 2, 3])\n",
+        "b = np.array([4, 5, 6])\n",
+        "\n",
+        "#Dot product\n",
+        "print(np.dot(a, b))\n",
+        "\n",
+        "#Matrix multiplication\n",
+        "print(np.matmul(a, b))"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "FBKt7b5FBQph",
+        "outputId": "1d9acab4-aed9-4502-a34b-ebd8999f3339"
+      },
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "tensor(32)\n",
+            "tensor(32)\n",
+            "32\n",
+            "32\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "4. Indexing and Slicing examples (Boolean masking, extracting subtensors)\n"
+      ],
+      "metadata": {
+        "id": "suCMPuAxBi0D"
+      }
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "#Indexing\n",
+        "\n",
+        "t = torch.tensor([[10, 20, 30],\n",
+        "                  [40, 50, 60]])\n",
+        "\n",
+        "print(t[0])\n",
+        "print(t[:, 1])\n",
+        "print(t[1, 2])\n",
+        "\n",
+        "#Boolean Masking\n",
+        "\n",
+        "#PyTorch\n",
+        "\n",
+        "x = torch.tensor([1, 5, 10, 15])\n",
+        "mask = x > 5\n",
+        "print(mask)\n",
+        "print(x[mask])\n",
+        "\n",
+        "#NumPy\n",
+        "\n",
+        "x = np.array([1, 5, 10, 15])\n",
+        "print(x[x > 5])\n",
+        "\n",
+        "#Extracting SubTensors\n",
+        "\n",
+        "t = torch.tensor([\n",
+        "    [1, 2, 3],\n",
+        "    [4, 5, 6],\n",
+        "    [7, 8, 9]])\n",
+        "\n",
+        "print(t[:2, :2])"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "h1Y420phBiEq",
+        "outputId": "106205d1-413f-4e42-aaa4-93564ac12867"
+      },
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "tensor([10, 20, 30])\n",
+            "tensor([20, 50])\n",
+            "tensor(60)\n",
+            "tensor([False, False,  True,  True])\n",
+            "tensor([10, 15])\n",
+            "[10 15]\n",
+            "tensor([[1, 2],\n",
+            "        [4, 5]])\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "5. Use .view(), .reshape(), .unsqueeze(), and .squeeze() in PyTorch. Compare with .reshape in Numpy"
+      ],
+      "metadata": {
+        "id": "AcYLHJmmDUHo"
+      }
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "#.view()\n",
+        "\n",
+        "x = torch.arange(6)\n",
+        "print(x)\n",
+        "\n",
+        "y = x.view(2, 3)\n",
+        "print(y)\n",
+        "\n",
+        "#.reshape()\n",
+        "\n",
+        "# PyTorch\n",
+        "x = torch.arange(6)\n",
+        "print(x.reshape(3, 2))\n",
+        "\n",
+        "# NumPy\n",
+        "x = np.arange(6)\n",
+        "print(x.reshape(3, 2))\n",
+        "\n",
+        "#.unsqueeze()\n",
+        "\n",
+        "x = torch.tensor([1, 2, 3])\n",
+        "print(x.shape)              # (3,)\n",
+        "print(x.unsqueeze(0).shape) # (1, 3)\n",
+        "print(x.unsqueeze(1).shape) # (3, 1)\n",
+        "\n",
+        "#.squeeze()\n",
+        "\n",
+        "x = torch.tensor([1, 2, 3])\n",
+        "print(x.shape)              # (3,)\n",
+        "print(x.unsqueeze(0).shape) # (1, 3)\n",
+        "print(x.unsqueeze(1).shape) # (3, 1)"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "Tm0CFSqeDcXu",
+        "outputId": "4f605058-4d04-4e0f-e497-6748c09598e3"
+      },
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "tensor([0, 1, 2, 3, 4, 5])\n",
+            "tensor([[0, 1, 2],\n",
+            "        [3, 4, 5]])\n",
+            "tensor([[0, 1],\n",
+            "        [2, 3],\n",
+            "        [4, 5]])\n",
+            "[[0 1]\n",
+            " [2 3]\n",
+            " [4 5]]\n",
+            "torch.Size([3])\n",
+            "torch.Size([1, 3])\n",
+            "torch.Size([3, 1])\n",
+            "torch.Size([3])\n",
+            "torch.Size([1, 3])\n",
+            "torch.Size([3, 1])\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "6. Broadcasting- Perform operations with tensors of different shapes.\n"
+      ],
+      "metadata": {
+        "id": "4Ty4iEGpEPF6"
+      }
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "a = torch.tensor([[1, 2, 3],\n",
+        "                  [4, 5, 6]])\n",
+        "\n",
+        "b = torch.tensor([10, 20, 30])\n",
+        "print(a + b)"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "UIHTDa2fERhT",
+        "outputId": "91217ecd-7add-43ed-fd50-337efbc7a575"
+      },
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "tensor([[11, 22, 33],\n",
+            "        [14, 25, 36]])\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "7. In-place vs Out-of-place operations\n"
+      ],
+      "metadata": {
+        "id": "738fHsKNEYLp"
+      }
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "#In-Place\n",
+        "\n",
+        "x = torch.tensor([1, 2, 3])\n",
+        "x += 5\n",
+        "print(x)\n",
+        "\n",
+        "#Out-Place\n",
+        "\n",
+        "x = torch.tensor([1, 2, 3])\n",
+        "y = x + 5\n",
+        "\n",
+        "print(x)\n",
+        "print(y)"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "xdofF8PdEabb",
+        "outputId": "965b9ff5-cd65-49ba-d1c6-f03ac7d2af3c"
+      },
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "tensor([6, 7, 8])\n",
+            "tensor([1, 2, 3])\n",
+            "tensor([6, 7, 8])\n"
+          ]
+        }
+      ]
+    }
+  ]
+}
