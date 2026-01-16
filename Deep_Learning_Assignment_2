@@ -1,0 +1,183 @@
+{
+  "nbformat": 4,
+  "nbformat_minor": 0,
+  "metadata": {
+    "colab": {
+      "provenance": [],
+      "authorship_tag": "ABX9TyNhP1VU34atf/aFKAJtA2LA",
+      "include_colab_link": true
+    },
+    "kernelspec": {
+      "name": "python3",
+      "display_name": "Python 3"
+    },
+    "language_info": {
+      "name": "python"
+    }
+  },
+  "cells": [
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "view-in-github",
+        "colab_type": "text"
+      },
+      "source": [
+        "<a href=\"https://colab.research.google.com/github/krishikasahni/Deep-Learning/blob/main/Deep_Learning_Assignment_2\" target=\"_parent\"><img src=\"https://colab.research.google.com/assets/colab-badge.svg\" alt=\"Open In Colab\"/></a>"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": 12,
+      "metadata": {
+        "id": "0XnEVHk1AGX8"
+      },
+      "outputs": [],
+      "source": [
+        "import numpy as np\n",
+        "import gzip\n",
+        "import matplotlib.pyplot as plt"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "from tensorflow.keras.datasets import mnist\n",
+        "import numpy as np\n",
+        "\n",
+        "# Load dataset\n",
+        "(X_train, y_train), (X_test, y_test) = mnist.load_data()\n",
+        "\n",
+        "# Normalize\n",
+        "X_train = X_train.reshape(-1, 784).T / 255.0\n",
+        "X_test = X_test.reshape(-1, 784).T / 255.0"
+      ],
+      "metadata": {
+        "id": "DqvNtpAiAWCk"
+      },
+      "execution_count": 13,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "input_size = 784\n",
+        "hidden_size = 64\n",
+        "output_size = 10\n",
+        "W1 = np.random.randn(hidden_size, input_size) * 0.01\n",
+        "b1 = np.zeros((hidden_size, 1))\n",
+        "W2 = np.random.randn(output_size, hidden_size) * 0.01\n",
+        "b2 = np.zeros((output_size, 1))"
+      ],
+      "metadata": {
+        "id": "n0GO-kECApZF"
+      },
+      "execution_count": 14,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "def sigmoid(z):\n",
+        "    return 1 / (1 + np.exp(-z))\n",
+        "\n",
+        "def sigmoid_derivative(z):\n",
+        "    s = sigmoid(z)\n",
+        "    return s * (1 - s)\n",
+        "\n",
+        "def softmax(z):\n",
+        "    exp = np.exp(z - np.max(z, axis=0))\n",
+        "    return exp / np.sum(exp, axis=0)"
+      ],
+      "metadata": {
+        "id": "pQFrY_-gAqTx"
+      },
+      "execution_count": 15,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "def forward_pass(X):\n",
+        "    Z1 = W1.dot(X) + b1\n",
+        "    A1 = sigmoid(Z1)\n",
+        "    Z2 = W2.dot(A1) + b2\n",
+        "    A2 = softmax(Z2)\n",
+        "    return Z1, A1, Z2, A2"
+      ],
+      "metadata": {
+        "id": "NT-DC0GnAuIT"
+      },
+      "execution_count": 16,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "def backprop(X, Y, Z1, A1, Z2, A2):\n",
+        "    m = X.shape[1]\n",
+        "\n",
+        "    Y_onehot = np.zeros((10, m))\n",
+        "    Y_onehot[Y, np.arange(m)] = 1\n",
+        "\n",
+        "    dZ2 = A2 - Y_onehot\n",
+        "    dW2 = (1/m) * dZ2.dot(A1.T)\n",
+        "    db2 = (1/m) * np.sum(dZ2, axis=1, keepdims=True)\n",
+        "\n",
+        "    dA1 = W2.T.dot(dZ2)\n",
+        "    dZ1 = dA1 * sigmoid_derivative(Z1)\n",
+        "    dW1 = (1/m) * dZ1.dot(X.T)\n",
+        "    db1 = (1/m) * np.sum(dZ1, axis=1, keepdims=True)\n",
+        "\n",
+        "    return dW1, db1, dW2, db2"
+      ],
+      "metadata": {
+        "id": "lUucme2FAvTa"
+      },
+      "execution_count": 17,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "def update_params(dW1, db1, dW2, db2, lr):\n",
+        "    global W1, b1, W2, b2\n",
+        "    W1 -= lr * dW1\n",
+        "    b1 -= lr * db1\n",
+        "    W2 -= lr * dW2\n",
+        "    b2 -= lr * db2"
+      ],
+      "metadata": {
+        "id": "Wd0dKFmvAz2v"
+      },
+      "execution_count": 19,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "_, _, _, A2_test = forward_pass(X_test)\n",
+        "test_predictions = np.argmax(A2_test, axis=0)\n",
+        "test_accuracy = np.mean(test_predictions == y_test) * 100\n",
+        "print(\"Test Accuracy:\", test_accuracy)"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "2BX-X0fuA2C2",
+        "outputId": "69fb10cd-0d6c-43a9-bfa8-ed67fc8a72a0"
+      },
+      "execution_count": 21,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Test Accuracy: 9.8\n"
+          ]
+        }
+      ]
+    }
+  ]
+}
