@@ -1,0 +1,169 @@
+{
+  "nbformat": 4,
+  "nbformat_minor": 0,
+  "metadata": {
+    "colab": {
+      "provenance": [],
+      "authorship_tag": "ABX9TyMc+TFtKgsFNq1sdBT2JEth",
+      "include_colab_link": true
+    },
+    "kernelspec": {
+      "name": "python3",
+      "display_name": "Python 3"
+    },
+    "language_info": {
+      "name": "python"
+    }
+  },
+  "cells": [
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "view-in-github",
+        "colab_type": "text"
+      },
+      "source": [
+        "<a href=\"https://colab.research.google.com/github/krishikasahni/Deep-Learning/blob/main/Deep_Learning_Assignment_3\" target=\"_parent\"><img src=\"https://colab.research.google.com/assets/colab-badge.svg\" alt=\"Open In Colab\"/></a>"
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "Single-Layer Perceptron (Linear Data)"
+      ],
+      "metadata": {
+        "id": "8edkGSvgKFcm"
+      }
+    },
+    {
+      "cell_type": "code",
+      "execution_count": 6,
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "R3vXoZiUJunW",
+        "outputId": "babea250-85f0-49d3-c9a6-ff7c8644ea15"
+      },
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Linear Dataset Accuracy: 0.95\n"
+          ]
+        }
+      ],
+      "source": [
+        "import numpy as np\n",
+        "from sklearn.datasets import make_classification\n",
+        "from sklearn.model_selection import train_test_split\n",
+        "\n",
+        "X, y = make_classification(\n",
+        "    n_samples=200,\n",
+        "    n_features=2,\n",
+        "    n_redundant=0,\n",
+        "    n_clusters_per_class=1,\n",
+        "    class_sep=2,\n",
+        "    random_state=42\n",
+        ")\n",
+        "\n",
+        "y = y.reshape(-1, 1)\n",
+        "X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)\n",
+        "weights = np.random.randn(2, 1)\n",
+        "bias = 0\n",
+        "lr = 0.01\n",
+        "epochs = 1000\n",
+        "\n",
+        "def step(x):\n",
+        "    return np.where(x >= 0, 1, 0)\n",
+        "\n",
+        "for _ in range(epochs):\n",
+        "    z = np.dot(X_train, weights) + bias\n",
+        "    y_pred = step(z)\n",
+        "\n",
+        "    error = y_train - y_pred\n",
+        "    weights += lr * np.dot(X_train.T, error)\n",
+        "    bias += lr * np.sum(error)\n",
+        "\n",
+        "z_test = np.dot(X_test, weights) + bias\n",
+        "y_test_pred = step(z_test)\n",
+        "\n",
+        "accuracy = np.mean(y_test_pred == y_test)\n",
+        "print(\"Linear Dataset Accuracy:\", accuracy)"
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "Multi-Layer Neural Network (Non-Linear Data)"
+      ],
+      "metadata": {
+        "id": "9bZqOIDwK0_G"
+      }
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "from sklearn.datasets import make_moons\n",
+        "\n",
+        "X, y = make_moons(n_samples=200, noise=0.2, random_state=42)\n",
+        "y = y.reshape(-1, 1)\n",
+        "\n",
+        "input_size = 2\n",
+        "hidden_size = 10\n",
+        "output_size = 1\n",
+        "\n",
+        "W1 = np.random.randn(input_size, hidden_size)\n",
+        "b1 = np.zeros((1, hidden_size))\n",
+        "W2 = np.random.randn(hidden_size, output_size)\n",
+        "b2 = np.zeros((1, output_size))\n",
+        "\n",
+        "lr = 0.01\n",
+        "epochs = 5000\n",
+        "\n",
+        "def sigmoid(x):\n",
+        "    return 1 / (1 + np.exp(-x))\n",
+        "\n",
+        "def sigmoid_derivative(x):\n",
+        "    return x * (1 - x)\n",
+        "\n",
+        "for _ in range(epochs):\n",
+        "    z1 = np.dot(X, W1) + b1\n",
+        "    a1 = sigmoid(z1)\n",
+        "\n",
+        "    z2 = np.dot(a1, W2) + b2\n",
+        "    y_pred = sigmoid(z2)\n",
+        "    error = y - y_pred\n",
+        "    d_output = error * sigmoid_derivative(y_pred)\n",
+        "    d_hidden = np.dot(d_output, W2.T) * sigmoid_derivative(a1)\n",
+        "\n",
+        "    W2 += lr * np.dot(a1.T, d_output)\n",
+        "    b2 += lr * np.sum(d_output, axis=0, keepdims=True)\n",
+        "    W1 += lr * np.dot(X.T, d_hidden)\n",
+        "    b1 += lr * np.sum(d_hidden, axis=0, keepdims=True)\n",
+        "\n",
+        "predictions = (y_pred >= 0.5).astype(int)\n",
+        "accuracy = np.mean(predictions == y)\n",
+        "print(\"Non-Linear Dataset Accuracy:\", accuracy)"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "lL6_dhSJK4-Q",
+        "outputId": "4a35f7b3-e6de-4316-c839-dcb36461f88e"
+      },
+      "execution_count": 7,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Non-Linear Dataset Accuracy: 0.965\n"
+          ]
+        }
+      ]
+    }
+  ]
+}
