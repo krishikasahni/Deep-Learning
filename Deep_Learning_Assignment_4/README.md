@@ -1,4 +1,4 @@
-##Experiments Overview
+#Experiments Overview
 
 This experiment introduces the basic building blocks of neural networks such as neurons, weights, bias, activation functions, and loss functions.  
 The objective is to understand how a simple neural network learns patterns from data using gradient descent.
@@ -36,7 +36,7 @@ Additionally, **transfer learning** is performed using a pretrained **ResNet-18*
 
 ---
 
-##Technologies and Tools Used
+#Technologies and Tools Used
 - **Python**
 - **PyTorch**
 - **NumPy**
