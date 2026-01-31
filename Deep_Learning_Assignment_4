@@ -1,0 +1,139 @@
+{
+  "nbformat": 4,
+  "nbformat_minor": 0,
+  "metadata": {
+    "colab": {
+      "provenance": [],
+      "authorship_tag": "ABX9TyP4iRPNV2gjKzel7Pg7Z2Zq",
+      "include_colab_link": true
+    },
+    "kernelspec": {
+      "name": "python3",
+      "display_name": "Python 3"
+    },
+    "language_info": {
+      "name": "python"
+    }
+  },
+  "cells": [
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "view-in-github",
+        "colab_type": "text"
+      },
+      "source": [
+        "<a href=\"https://colab.research.google.com/github/krishikasahni/Deep-Learning/blob/main/Deep_Learning_Assignment_4\" target=\"_parent\"><img src=\"https://colab.research.google.com/assets/colab-badge.svg\" alt=\"Open In Colab\"/></a>"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": 2,
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "I2NS4zi-NkvG",
+        "outputId": "e42622df-f44b-470d-c0a6-0139029adcfd"
+      },
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Epoch 1, Loss: 1.3550\n",
+            "Epoch 2, Loss: 0.9813\n",
+            "Epoch 3, Loss: 0.8369\n",
+            "Accuracy: 67.52\n"
+          ]
+        }
+      ],
+      "source": [
+        "import torch\n",
+        "import torch.nn as nn\n",
+        "import torch.optim as optim\n",
+        "import torchvision\n",
+        "import torchvision.transforms as transforms\n",
+        "from torch.utils.data import DataLoader\n",
+        "\n",
+        "device = torch.device(\"cuda\" if torch.cuda.is_available() else \"cpu\")\n",
+        "\n",
+        "transform = transforms.Compose([\n",
+        "    transforms.ToTensor(),\n",
+        "    transforms.Normalize((0.5,), (0.5,))\n",
+        "])\n",
+        "\n",
+        "trainset = torchvision.datasets.CIFAR10(root='./data', train=True,\n",
+        "                                        download=True, transform=transform)\n",
+        "testset = torchvision.datasets.CIFAR10(root='./data', train=False,\n",
+        "                                       download=True, transform=transform)\n",
+        "\n",
+        "trainloader = DataLoader(trainset, batch_size=64, shuffle=True)\n",
+        "testloader = DataLoader(testset, batch_size=64, shuffle=False)\n",
+        "\n",
+        "# CNN Model\n",
+        "class CNN(nn.Module):\n",
+        "    def __init__(self, activation):\n",
+        "        super().__init__()\n",
+        "        self.conv1 = nn.Conv2d(3, 32, 3, padding=1)\n",
+        "        self.conv2 = nn.Conv2d(32, 64, 3, padding=1)\n",
+        "        self.pool = nn.MaxPool2d(2, 2)\n",
+        "        self.fc1 = nn.Linear(64 * 8 * 8, 128)\n",
+        "        self.fc2 = nn.Linear(128, 10)\n",
+        "        self.act = activation\n",
+        "\n",
+        "    def forward(self, x):\n",
+        "        x = self.pool(self.act(self.conv1(x)))\n",
+        "        x = self.pool(self.act(self.conv2(x)))\n",
+        "        x = x.view(x.size(0), -1)\n",
+        "        x = self.act(self.fc1(x))\n",
+        "        x = self.fc2(x)\n",
+        "        return x\n",
+        "\n",
+        "# Weight Initialization\n",
+        "def init_weights(model, method):\n",
+        "    for m in model.modules():\n",
+        "        if isinstance(m, (nn.Conv2d, nn.Linear)):\n",
+        "            if method == \"xavier\":\n",
+        "                nn.init.xavier_uniform_(m.weight)\n",
+        "            elif method == \"kaiming\":\n",
+        "                nn.init.kaiming_uniform_(m.weight)\n",
+        "            else:\n",
+        "                nn.init.uniform_(m.weight, -0.1, 0.1)\n",
+        "\n",
+        "# Training & Evaluation\n",
+        "def train_and_test(model, optimizer, epochs=3):\n",
+        "    criterion = nn.CrossEntropyLoss()\n",
+        "    model.train()\n",
+        "    for e in range(epochs):\n",
+        "        loss_sum = 0\n",
+        "        for x, y in trainloader:\n",
+        "            x, y = x.to(device), y.to(device)\n",
+        "            optimizer.zero_grad()\n",
+        "            loss = criterion(model(x), y)\n",
+        "            loss.backward()\n",
+        "            optimizer.step()\n",
+        "            loss_sum += loss.item()\n",
+        "        print(f\"Epoch {e+1}, Loss: {loss_sum/len(trainloader):.4f}\")\n",
+        "\n",
+        "    model.eval()\n",
+        "    correct = total = 0\n",
+        "    with torch.no_grad():\n",
+        "        for x, y in testloader:\n",
+        "            x, y = x.to(device), y.to(device)\n",
+        "            preds = torch.argmax(model(x), 1)\n",
+        "            total += y.size(0)\n",
+        "            correct += (preds == y).sum().item()\n",
+        "\n",
+        "    print(\"Accuracy:\", 100 * correct / total)\n",
+        "\n",
+        "model = CNN(nn.ReLU()).to(device)\n",
+        "init_weights(model, \"kaiming\")\n",
+        "optimizer = optim.Adam(model.parameters(), lr=0.001)\n",
+        "train_and_test(model, optimizer)\n",
+        "\n",
+        "torch.save(model.state_dict(), \"cnn_cifar10.pth\")"
+      ]
+    }
+  ]
+}
